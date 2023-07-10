@@ -1,4 +1,7 @@
 package io.singularitynet.MissionHandlers;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import io.singularitynet.MissionHandlerInterfaces.IVideoProducer;
@@ -13,11 +16,16 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL12.GL_BGRA;
+import static org.lwjgl.opengl.GL12.GL_RGBA;
 
 public class VideoProducerImplementation extends HandlerBase implements IVideoProducer
 {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private VideoProducer videoParams;
     private FloatBuffer depthBuffer;
+    private long frameNum=0;
+    private double sum=0;
 
     @Override
     public boolean parseParameters(Object params)
@@ -60,7 +68,17 @@ public class VideoProducerImplementation extends HandlerBase implements IVideoPr
         Framebuffer framebuffer = MinecraftClient.getInstance().getFramebuffer();
         int i = framebuffer.textureWidth;
         int j = framebuffer.textureHeight;
-        GlStateManager._readPixels(0, 0, i, j, GL_BGRA, GL11.GL_UNSIGNED_BYTE, buffer);
+        long start = System.nanoTime();
+        GlStateManager._readPixels(0, 0, i, j, GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+        long end = System.nanoTime();
+        this.sum += (end - start) / 1000000;
+        this.frameNum ++;
+        if (this.frameNum == 2000){
+            LOGGER.info("avg read time: "  + (this.sum / 2000));
+            this.sum = 0;
+            this.frameNum = 0;
+        }
+        
         int[] sizes = new int[2];
         sizes[0] = i;
         sizes[1] = j;
