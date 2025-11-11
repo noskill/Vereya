@@ -9,7 +9,7 @@
     "KeyBindingMixin", "MouseMixin", "MouseAccessorMixin", "InGameHudMixin", "LevelStorageMixin",
     "MinecraftClientEventsMixin", "LootTableProviderMixin", "MobEntityMixin", "MobEntityAccessorMixin",
     "ClientWorldMixinAccess", "EntityMixin", "ServerEntityManagerMixin", "ServerWorldMixin", "ServerWorldEntityLoaderMixin",
-	"ServerPlayNetworkHandlerMixin"
+	"ServerPlayNetworkHandlerMixin", "TextureManagerMixin", "EntityRenderDispatcherMixin", "GameRendererMixin"
   ],
   "server": ["ServerEntityManagerMixin", "ServerWorldMixin", "ServerWorldEntityLoaderMixin",
   		"ServerPlayNetworkHandlerMixin"
